@@ -118,16 +118,17 @@ nav {
   background: radial-gradient(ellipse at center, rgba(37,112,181,0.18) 0%, transparent 70%);
   pointer-events: none;
 }
-.hero-content { width: 100%; text-align: center; padding-left: 0; margin-top: -0.5rem; }
+.hero-content { width: 100%; text-align: center; padding-left: 0; margin-top: -0.5rem; position: relative; top: 4rem; }
 .hero-logo-right { flex-shrink: 0; display: flex; align-items: center; justify-content: center; transform: none; margin-top: -6.7rem; }
 .hero-eyebrow {
   display: inline-flex; align-items: center; gap: 0.6rem;
   font-size: 25px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase;
   color: #4BA3DE; white-space: nowrap; margin-top: 4.5rem; margin-bottom: -2rem;
+  position: relative; top: 4rem;
 }
 .hero-eyebrow::before { display: none; }
 .hero-headline {
-  font-size: clamp(14px, 4.5vw, 65px); font-weight: 700;
+  font-size: clamp(2.5rem, 6.5vw, 65px); font-weight: 700;
   line-height: 1.35; letter-spacing: 0.01em;
   color: #F4F8FC; margin-bottom: 0.75rem;
   text-align: center; width: 100%;
@@ -197,6 +198,7 @@ nav {
 
 /* ─── SECTION BASE ─────────────────────────────────── */
 .section { padding: clamp(6rem, 10vw, 9rem) clamp(1.5rem, 5vw, 4rem); }
+.mobile-br { display: none; }
 .s-eyebrow {
   display: inline-block;
   font-size: 1.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
@@ -530,7 +532,7 @@ footer {
   .nav-links { margin-right: 11rem !important; }
   .hero-inner { margin-top: 0; }
   .hero-eyebrow { font-size: 20px !important; margin-top: 3rem !important; margin-bottom: -1.5rem !important; }
-  .hero-headline { font-size: clamp(14px, 4.5vw, 65px) !important; }
+  .hero-headline { font-size: clamp(2rem, 5vw, 52px) !important; }
   .hero-content { margin-top: 0 !important; }
   .hero-logo-right { margin-top: -4rem !important; }
   .hero-arrow { bottom: 2rem !important; }
@@ -539,7 +541,7 @@ footer {
 @media (max-width: 1366px) {
   .hero-inner { margin-top: 0; }
   .hero-eyebrow { font-size: 18px !important; margin-top: 2.5rem !important; margin-bottom: -1.5rem !important; }
-  .hero-headline { font-size: clamp(14px, 4.5vw, 65px) !important; }
+  .hero-headline { font-size: clamp(1.8rem, 4.5vw, 46px) !important; }
   .hero-content { margin-top: 0 !important; }
   .hero-logo-right { margin-top: -4rem !important; }
   .hero-arrow { bottom: 1.5rem !important; }
@@ -574,7 +576,7 @@ footer {
   .hero-inner { align-items: center; }
   .hero-eyebrow { font-size: 16px !important; margin-top: 4rem !important; }
   .hero-content { padding-left: 0; text-align: center; margin-top: 0 !important; }
-  .hero-headline { font-size: clamp(14px, 4.5vw, 65px) !important; text-align: center; }
+  .hero-headline { font-size: clamp(1.8rem, 4vw, 2.4rem) !important; text-align: center; }
   .hero-logo-right { margin-top: -2rem !important; }
   .s-title { font-size: clamp(1.8rem, 4vw, 2.6rem) !important; }
   .feat-tag { font-size: 18px !important; }
@@ -611,12 +613,12 @@ footer {
 
   /* 히어로 */
   .hero-inner { flex-direction: column; align-items: center; gap: 1.5rem; margin-top: 0; }
-  .hero-eyebrow { font-size: 13px !important; margin-top: 5rem !important; margin-bottom: 0 !important; letter-spacing: 0.08em !important; }
-  .hero-content { padding-left: 0; max-width: 100%; text-align: center; margin-top: 0 !important; }
+  .hero-eyebrow { font-size: 17px !important; margin-top: 5rem !important; margin-bottom: 0 !important; letter-spacing: 0.08em !important; top: -2rem !important; }
+  .hero-content { padding-left: 0; max-width: 100%; text-align: center; margin-top: 0 !important; top: -2rem !important; }
   .hero-headline { font-size: clamp(14px, 4.5vw, 65px) !important; text-align: center; }
   .hero-line1, .hero-line2 { display: block !important; white-space: nowrap !important; }
   .hero-logo-right { display: flex !important; margin-top: -3rem !important; }
-  .hero-logo-right img { width: 200px !important; opacity: 1 !important; }
+  .hero-logo-right img { width: 260px !important; opacity: 1 !important; }
   nav { padding: 1.1rem 1.25rem !important; }
   .nav-brand { margin-left: 0 !important; }
 
@@ -679,7 +681,8 @@ footer {
 }
 
 @media (max-width: 560px) {
-  .hero-eyebrow { font-size: 11px !important; margin-top: 4.5rem !important; }
+  .hero-eyebrow { font-size: 15px !important; margin-top: 4.5rem !important; top: -2rem !important; }
+  .hero-content { top: -2rem !important; }
   .hero-headline { font-size: clamp(22px, 7vw, 65px) !important; text-align: center; }
   .hero-line1, .hero-line2 { display: block !important; white-space: normal !important; word-break: keep-all; text-align: center !important; }
   .section { padding: 3rem 1rem; }
@@ -689,6 +692,23 @@ footer {
   .hero-arrow { bottom: 1rem !important; }
   .fade-in.features-header img { height: 110px !important; }
   .feat-visual[style*="display:flex"] img { width: 55% !important; max-width: 150px !important; }
+  .mobile-br { display: block; }
+  /* FAQ + CTA: 모바일에서 두 섹션이 뷰포트에 함께 들어오게 */
+  #faq { padding: 2rem 1rem !important; }
+  #faq > img { width: 180px !important; }
+  #faq > div > div:first-child { margin-bottom: 1.5rem !important; }
+  #faq details { padding: 0.9rem 1rem !important; }
+  #faq details summary { font-size: clamp(0.82rem, 3.6vw, 1rem) !important; }
+  .cta-footer-wrap { min-height: auto !important; }
+  .cta-section { padding: 1.5rem 1rem !important; min-height: 52vh !important; }
+  #cta .s-title { font-size: clamp(1.5rem, 7vw, 2rem) !important; line-height: 1.55 !important; }
+  #cta .s-title > span { transform: translateY(0.15rem) !important; }
+  #cta .cta-actions { margin-top: 1.25rem !important; }
+  #cta .cta-actions > div { padding: 0.75rem 1.5rem !important; gap: 0.5rem !important; }
+  #cta .cta-actions > div > p:first-child { font-size: 1rem !important; }
+  #cta .cta-actions > div div p { font-size: 0.9rem !important; }
+  #cta .fade-in > p:last-child { padding-top: 1.25rem !important; font-size: 0.85rem !important; }
+  #cta > img { width: 260px !important; bottom: 20px !important; }
 }
 
 /* 햄버거 버튼 */
@@ -801,7 +821,7 @@ html body .feat-visual.feat-icon-pair { flex-direction: row !important; justify-
       <h1 class="hero-headline"><span class="hero-line1">제약사·CRO의 임상 운영/모니터링 팀을 위한</span><span class="hero-line2">임상연구 모니터링 특화 플랫폼</span></h1>
     </div>
     <div class="hero-logo-right">
-      <img src="logo/ti-logo-icon-white.png" alt="Trial Insight" style="width: 570px; height: auto; opacity: 1; margin-top:0.3rem;">
+      <img src="logo/ti-logo-icon-white.png" alt="Trial Insight" style="width: 480px; height: auto; opacity: 1; margin-top:0.3rem;">
     </div>
   </div>
 
@@ -1120,13 +1140,13 @@ html body .feat-visual.feat-icon-pair { flex-direction: row !important; justify-
   </div>
 </section>
 
-<div style="min-height:100vh; display:flex; flex-direction:column;">
+<div class="cta-footer-wrap" style="min-height:100vh; display:flex; flex-direction:column;">
 
 <!-- CTA -->
 <section class="cta-section" id="cta" style="flex:1; position:relative; overflow:hidden;">
   <img src="icons/icon-logo-memo.png" alt="" aria-hidden="true" style="position:absolute; width:560px; height:auto; opacity:0.45; pointer-events:none; bottom:-80px; left:50%; transform:translateX(calc(-50% + 1.5rem)) rotate(-12deg); z-index:0; -webkit-mask-image:linear-gradient(to bottom, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 70%); mask-image:linear-gradient(to bottom, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 70%);">
   <div class="fade-in" style="position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; height:100%;">
-    <h2 class="s-title" style="margin-top:1rem;"><span style="font-family:'KBLJumpCondensed',sans-serif; font-weight:800; font-style:normal; display:inline-block; transform:translateY(-0.3rem);">Trial Insight</span>가 궁금하신가요?</h2>
+    <h2 class="s-title" style="margin-top:1rem;"><span style="font-family:'KBLJumpCondensed',sans-serif; font-weight:800; font-style:normal; display:inline-block; transform:translateY(-0.3rem);">Trial Insight</span>가<br class="mobile-br"> 궁금하신가요?</h2>
     <div class="cta-actions" style="margin-top:2.5rem;">
       <div style="display:flex; flex-direction:column; align-items:center; gap:0.75rem; padding:2rem 3rem;">
         <p style="color:rgba(255,255,255,0.95); font-size:1.6rem; font-weight:800; margin:0 0 0.5rem; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:10px; padding:0.5rem 1.5rem; backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);">제품 정보 문의하기</p>
@@ -1136,7 +1156,7 @@ html body .feat-visual.feat-icon-pair { flex-direction: row !important; justify-
         </div>
       </div>
     </div>
-    <p style="color:rgba(255,255,255,0.88); font-size:1rem; font-weight:400; margin-top:auto; padding-top:3rem;">제품 데모는 준비 중입니다. 문의 주시면 공개 일정에 맞춰 안내드리겠습니다.</p>
+    <p style="color:rgba(255,255,255,0.88); font-size:1rem; font-weight:400; margin-top:auto; padding-top:3rem;">제품 데모는 준비 중입니다. 문의 주시면<br class="mobile-br"> 공개 일정에 맞춰 안내드리겠습니다.</p>
   </div>
 </section>
 
@@ -1296,7 +1316,7 @@ window.addEventListener('scroll', function() {
     var t = Date.now() * 0.00025;
     ctx.clearRect(0, 0, W, H);
 
-    var size = Math.min(W, H) * 0.23;
+    var size = Math.min(W, H) * (W < 600 ? 0.35 : 0.23);
     var cx = W * 0.5, cy = W < 1600 ? H * 0.67 : H * 0.67;
 
     var rotated = verts.map(function(v) {
