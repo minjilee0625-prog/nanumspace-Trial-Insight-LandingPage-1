@@ -127,13 +127,14 @@ nav {
 }
 .hero-eyebrow::before { display: none; }
 .hero-headline {
-  font-size: clamp(2.5rem, 6.5vw, 65px); font-weight: 700;
-  line-height: 1.4; letter-spacing: 0.01em;
+  font-size: clamp(14px, 4.5vw, 65px); font-weight: 700;
+  line-height: 1.35; letter-spacing: 0.01em;
   color: #F4F8FC; margin-bottom: 0.75rem;
   text-align: center; width: 100%;
 }
 .hero-headline em { font-style: normal; color: #4BA3DE; font-weight: 800; font-family: 'KBLJumpCondensed', sans-serif; font-size: 0.97em; display: inline-block; transform: skewX(-10deg); position: relative; left: -0.4rem; }
-.hero-line1, .hero-line2 { white-space: nowrap; display: inline; }
+.hero-line1 { display: block; white-space: nowrap; margin-bottom: 0.25em; }
+.hero-line2 { display: block; white-space: nowrap; }
 .hero-tagline {
   font-size: clamp(1.05rem, 2vw, 1.2rem); font-weight: 600;
   color: rgba(168,212,240,0.75); letter-spacing: -0.01em;
@@ -529,20 +530,18 @@ footer {
   .nav-links { margin-right: 11rem !important; }
   .hero-inner { margin-top: 0; }
   .hero-eyebrow { font-size: 20px !important; margin-top: 3rem !important; margin-bottom: -1.5rem !important; }
-  .hero-headline { font-size: clamp(2rem, 5vw, 52px) !important; }
+  .hero-headline { font-size: clamp(14px, 4.5vw, 65px) !important; }
   .hero-content { margin-top: 0 !important; }
   .hero-logo-right { margin-top: -4rem !important; }
-  .hero-logo-right img { width: 440px !important; }
   .hero-arrow { bottom: 2rem !important; }
 }
 
 @media (max-width: 1366px) {
   .hero-inner { margin-top: 0; }
   .hero-eyebrow { font-size: 18px !important; margin-top: 2.5rem !important; margin-bottom: -1.5rem !important; }
-  .hero-headline { font-size: clamp(1.8rem, 4.5vw, 46px) !important; }
+  .hero-headline { font-size: clamp(14px, 4.5vw, 65px) !important; }
   .hero-content { margin-top: 0 !important; }
   .hero-logo-right { margin-top: -4rem !important; }
-  .hero-logo-right img { width: 390px !important; }
   .hero-arrow { bottom: 1.5rem !important; }
 
   /* 섹션 3 — 태블릿 포함 1열 세로 배치 */
@@ -569,15 +568,13 @@ footer {
 }
 
 @media (max-width: 1200px) {
-  .hero-logo-right img { width: 480px !important; }
 }
 
 @media (max-width: 1000px) {
   .hero-inner { align-items: center; }
   .hero-eyebrow { font-size: 16px !important; margin-top: 4rem !important; }
   .hero-content { padding-left: 0; text-align: center; margin-top: 0 !important; }
-  .hero-headline { font-size: clamp(1.8rem, 4vw, 2.4rem) !important; text-align: center; }
-  .hero-logo-right img { width: 320px !important; }
+  .hero-headline { font-size: clamp(14px, 4.5vw, 65px) !important; text-align: center; }
   .hero-logo-right { margin-top: -2rem !important; }
   .s-title { font-size: clamp(1.8rem, 4vw, 2.6rem) !important; }
   .feat-tag { font-size: 18px !important; }
@@ -604,8 +601,8 @@ footer {
 }
 
 @media (max-width: 900px) {
-  .hero-line1, .hero-line2 { display: block !important; white-space: normal !important; }
-  .hero-headline { text-align: center !important; }
+  .hero-line1, .hero-line2 { display: block !important; white-space: nowrap !important; }
+  .hero-headline { font-size: clamp(14px, 4.5vw, 65px) !important; text-align: center !important; }
   .mobile-break { display: block; }
 }
 
@@ -616,10 +613,10 @@ footer {
   .hero-inner { flex-direction: column; align-items: center; gap: 1.5rem; margin-top: 0; }
   .hero-eyebrow { font-size: 13px !important; margin-top: 5rem !important; margin-bottom: 0 !important; letter-spacing: 0.08em !important; }
   .hero-content { padding-left: 0; max-width: 100%; text-align: center; margin-top: 0 !important; }
-  .hero-headline { font-size: clamp(2.2rem, 7.5vw, 2.8rem) !important; text-align: center; }
-  .hero-line1, .hero-line2 { display: block !important; white-space: normal !important; }
+  .hero-headline { font-size: clamp(14px, 4.5vw, 65px) !important; text-align: center; }
+  .hero-line1, .hero-line2 { display: block !important; white-space: nowrap !important; }
   .hero-logo-right { display: flex !important; margin-top: -3rem !important; }
-  .hero-logo-right img { width: 200px !important; opacity: 0.7 !important; }
+  .hero-logo-right img { width: 200px !important; opacity: 1 !important; }
   nav { padding: 1.1rem 1.25rem !important; }
   .nav-brand { margin-left: 0 !important; }
 
@@ -683,7 +680,8 @@ footer {
 
 @media (max-width: 560px) {
   .hero-eyebrow { font-size: 11px !important; margin-top: 4.5rem !important; }
-  .hero-headline { font-size: clamp(2rem, 7vw, 2.4rem) !important; }
+  .hero-headline { font-size: clamp(22px, 7vw, 65px) !important; text-align: center; }
+  .hero-line1, .hero-line2 { display: block !important; white-space: normal !important; word-break: keep-all; text-align: center !important; }
   .section { padding: 3rem 1rem; }
   .s-title { font-size: clamp(1.2rem, 6vw, 1.6rem) !important; }
   .feat-title { font-size: clamp(1.1rem, 5.5vw, 1.4rem) !important; }
@@ -800,7 +798,7 @@ html body .feat-visual.feat-icon-pair { flex-direction: row !important; justify-
   <div class="hero-inner" style="padding-top:2.2rem;">
     <div class="hero-eyebrow">Clinical Monitoring Intelligence</div>
     <div class="hero-content">
-      <h1 class="hero-headline"><span class="hero-line1">제약사·CRO 의 임상 운영/모니터링 팀을 위한</span><br><span class="hero-line2">임상연구 모니터링 특화 플랫폼</span></h1>
+      <h1 class="hero-headline"><span class="hero-line1">제약사·CRO의 임상 운영/모니터링 팀을 위한</span><span class="hero-line2">임상연구 모니터링 특화 플랫폼</span></h1>
     </div>
     <div class="hero-logo-right">
       <img src="logo/ti-logo-icon-white.png" alt="Trial Insight" style="width: 570px; height: auto; opacity: 1; margin-top:0.3rem;">
