@@ -687,8 +687,10 @@ footer {
   .hero-line1, .hero-line2 { display: block !important; white-space: normal !important; word-break: keep-all; text-align: center !important; }
   .section { padding: 3rem 1rem; }
   .s-title { font-size: clamp(1.2rem, 6vw, 1.6rem) !important; }
-  .feat-title { font-size: clamp(1.1rem, 5.5vw, 1.4rem) !important; }
+  .feat-title { font-size: clamp(1.1rem, 5.5vw, 1.4rem) !important; white-space: normal !important; word-break: keep-all !important; }
   .feat-desc { font-size: 0.875rem !important; }
+  .feat-desc span { white-space: normal !important; }
+  .chip { white-space: normal !important; }
   .hero-arrow { bottom: 1rem !important; }
   .fade-in.features-header img { height: 110px !important; }
   .feat-visual[style*="display:flex"] img { width: 55% !important; max-width: 150px !important; }
@@ -704,11 +706,16 @@ footer {
   #cta .s-title { font-size: clamp(1.5rem, 7vw, 2rem) !important; line-height: 1.55 !important; }
   #cta .s-title > span { transform: translateY(0.15rem) !important; }
   #cta .cta-actions { margin-top: 1.25rem !important; }
-  #cta .cta-actions > div { padding: 0.75rem 1.5rem !important; gap: 0.5rem !important; }
+  #cta .cta-actions > div { padding: 0.75rem 1.5rem !important; gap: 0.5rem !important; max-width: 100% !important; box-sizing: border-box !important; word-break: keep-all !important; }
   #cta .cta-actions > div > p:first-child { font-size: 1rem !important; }
   #cta .cta-actions > div div p { font-size: 0.9rem !important; }
   #cta .fade-in > p:last-child { padding-top: 1.25rem !important; font-size: 0.85rem !important; }
   #cta > img { width: 260px !important; bottom: 20px !important; }
+  footer { padding: 0.5rem 1.5rem 0.75rem !important; gap: 0.4rem !important; margin-top: -1.5rem !important; display: flex !important; flex-direction: column !important; align-items: center !important; }
+  .footer-brand { text-align: center !important; }
+  .footer-brand img { height: 52px !important; margin-top: 1rem !important; }
+  .footer-copy { font-size: 0.6rem !important; margin-top: -0.5rem !important; text-align: left !important; width: fit-content !important; margin-left: auto !important; margin-right: auto !important; }
+  .footer-copy > span:first-child { margin-top: 0.25rem !important; margin-bottom: 0.5rem !important; display: block !important; text-align: left !important; }
 }
 
 /* 햄버거 버튼 */
@@ -868,7 +875,7 @@ html body .feat-visual.feat-icon-pair { flex-direction: row !important; justify-
 <!-- FEATURES -->
 <section class="section features-section" id="features" style="padding-top: 0; margin-top: -3rem; padding-bottom: calc(clamp(6rem, 10vw, 9rem) - 7rem);">
   <div class="fade-in features-header" style="margin-bottom:14rem; text-align:center; margin-top:1rem; position:relative; min-height:330px; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding-top:175px; gap:0.5rem;">
-    <h2 class="s-title" style="position:relative; z-index:1; margin:0; color:#1B3A6B;">임상연구 모니터링 특화 플랫폼</h2>
+    <h2 class="s-title" style="position:relative; z-index:1; margin:0; color:#1B3A6B;">핵심 기능</h2>
     <img src="logo/ti-logo-full.png" alt="" aria-hidden="true" style="display:block; margin:1.3rem auto 0; height:340px; width:auto; max-width:90%; position:relative; z-index:1;">
   </div>
 
@@ -1198,6 +1205,10 @@ html body .feat-visual.feat-icon-pair { flex-direction: row !important; justify-
 }
 #backToTop.visible { opacity: 1; pointer-events: auto; }
 #backToTop:hover { transform: translateY(-3px); background: var(--sky-dark); }
+@media (max-width: 560px) {
+  #backToTop { width: 34px !important; height: 34px !important; bottom: 0.6rem !important; right: 0.5rem !important; }
+  #backToTop svg { width: 16px !important; height: 16px !important; }
+}
 </style>
 
 <script>
