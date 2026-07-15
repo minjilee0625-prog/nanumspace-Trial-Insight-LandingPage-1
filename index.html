@@ -270,10 +270,15 @@ nav.nav-scrolled:not(.nav-light-theme) .nav-links a { color: rgba(255,255,255,0.
 /* ─── PAGE LOAD ENTRANCE ANIMATIONS ──────────── */
 /* 순서: 1.아이브로우 → 2.헤더타이틀 → 3.서브텍스트 → 4.로고 이미지 */
 @keyframes heroEnterFade {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes heroLogoEnter {
+  from { opacity: 0; transform: translateY(24px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 /* nav 페이드인 제거 */
+.hero-headline { animation: heroEnterFade 0.9s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: 0.15s; }
 /* 아이브로우 자리에 겹쳐 나타나는 서브텍스트 */
 .hero-sub-overlay {
   position: absolute;
@@ -295,6 +300,7 @@ nav.nav-scrolled:not(.nav-light-theme) .nav-links a { color: rgba(255,255,255,0.
   font-size: 1em;
   margin-right: 0.3em;
 }
+.hero-logo-right { animation: heroLogoEnter 1s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: 1.05s; }
 .hero-tagline {
   font-size: clamp(1.05rem, 2vw, 1.2rem); font-weight: 600;
   color: rgba(168,212,240,0.75); letter-spacing: -0.01em;
@@ -2051,65 +2057,176 @@ window.addEventListener('scroll', function() {
   });
 })();
 
-/* ── Feature 가로 캐러셀 (전체 탭 공통) ── */
+/* ── Feature Carousel (FCC) ── */
 (function() {
-  const featuresSection = document.getElementById('features');
-  const blocks = ['feature1', 'feature2', 'feature3', 'feature4']
-    .map(function(id) { return document.getElementById(id); })
-    .filter(Boolean);
-  if (!featuresSection || !blocks.length) return;
+  var DATA = [
+    { label: 'Daily Data Sync',    title: 'EDC 자동 동기화·시각화',       desc: '매일 정해진 시점에 동기화하여 데이터를<br>검토·모니터링합니다. 등록 현황·유효성·안전성<br>현황을 매일 시각화합니다.' },
+    { label: 'Central Monitoring', title: '데이터 품질·정합성 자동 점검',  desc: '데이터 오류와 이상 패턴을 매일 자동 점검하고,<br>기관별로 정리하여 데이터 정합성과 <br class="fcc-m-br">기관 관리 <br class="fcc-d-br">상태를 한눈에 파악합니다.' },
+    { label: 'Ask Your Data',      title: 'AI 연구 어시스턴트',            desc: '자연어로 질문하면 차트·요약으로 즉답합니다.<br>데이터 조회·해석 및 인사이트 도출에 도움을 줍니다.' },
+    { label: 'Auto Reports',       title: '기관 커뮤니케이션',             desc: '기관별 정기 보고서·뉴스레터를 자동 생성·발송하여,<br>등록 독려에 활용하고 의뢰사 로고로 브랜딩합니다.' }
+  ];
+  var total = DATA.length;
+  var busy  = false;
+  var cur   = 0;
 
-  const pager = document.querySelector('.feature-pager');
-  const pagerPrev = document.querySelector('.feat-pager-prev');
-  const pagerNext = document.querySelector('.feat-pager-next');
-  const pagerCurrent = document.querySelector('.feat-pager-current');
-  let currentIndex = 0;
+  var labelEl  = document.getElementById('fcc-label');
+  var titleEl  = document.getElementById('fcc-title');
+  var descEl   = document.getElementById('fcc-desc');
+  var prevBtn  = document.getElementById('fcc-prev');
+  var nextBtn  = document.getElementById('fcc-next');
+  var dotEls   = Array.prototype.slice.call(document.querySelectorAll('#fcc-dots .fcc-dot'));
+  var slides   = [];
+  for (var i = 0; i < total; i++) { slides.push(document.getElementById('fcc-slide-' + i)); }
+  if (!titleEl || !slides[0]) return;
 
-  function render() {
-    blocks.forEach(function(b, i) {
-      b.style.transform = 'translateX(' + ((i - currentIndex) * 100) + '%)';
+  function updateDots() {
+    dotEls.forEach(function(d, i) { d.classList.toggle('fcc-dot-active', i === cur); });
+  }
+
+  /* normalized diff: how far slide i is from active c, wrapping around the loop */
+  function gd(i, c) {
+    var d = i - c;
+    while (d >  total / 2) d -= total;
+    while (d < -total / 2) d += total;
+    return d;
+  }
+
+  function updateText() {
+    var d = DATA[cur];
+    [titleEl, descEl, labelEl].forEach(function(e){ if (e) e.style.opacity = '0'; });
+    setTimeout(function() {
+      titleEl.textContent = d.title;
+      descEl.innerHTML    = d.desc;
+      if (labelEl) labelEl.textContent = d.label;
+      [titleEl, descEl, labelEl].forEach(function(e){ if (e) e.style.opacity = '1'; });
+    }, 260);
+    updateDots();
+  }
+
+  function goTo(newCur) {
+    if (busy || newCur === cur) return;
+    busy = true;
+    var oldCur = cur;
+    cur = ((newCur % total) + total) % total;
+
+    slides.forEach(function(s, i) {
+      var od = gd(i, oldCur), nd = gd(i, cur);
+      if (Math.abs(od) > 1 && Math.abs(nd) === 1) {
+        s.style.transition = 'none';
+        s.style.transform  = 'translateX(' + (nd < 0 ? -160 : 160) + '%) scale(0.9)';
+        s.style.opacity    = '0';
+        s.style.zIndex     = '1';
+      }
     });
+
+    requestAnimationFrame(function() { requestAnimationFrame(function() {
+      slides.forEach(function(s, i) {
+        var od = gd(i, oldCur), nd = gd(i, cur);
+        var x, op, sc, zi, anim;
+        var peekX = window.innerWidth <= 800 ? 65 : 45;
+        if      (nd === 0)           { x =   0;      op = 1;    sc = 1;   zi = 2; anim = true;  }
+        else if (nd === -1)          { x = -peekX;   op = 0.35; sc = 0.9; zi = 1; anim = true;  }
+        else if (nd ===  1)          { x =  peekX;   op = 0.35; sc = 0.9; zi = 1; anim = true;  }
+        else if (Math.abs(od) === 1) { x = od < 0 ? -160 : 160; op = 0; sc = 0.9; zi = 0; anim = true;  }
+        else                         { x = nd < 0 ? -160 : 160; op = 0; sc = 0.9; zi = 0; anim = false; }
+        s.style.transition = anim ? '' : 'none';
+        s.style.transform  = 'translateX(' + x + '%) scale(' + sc + ')';
+        s.style.opacity    = String(op);
+        s.style.zIndex     = String(zi);
+        s.classList.toggle('fcc-side', nd !== 0 && Math.abs(nd) === 1);
+      });
+      updateText();
+      setTimeout(function() { busy = false; }, 580);
+    }); });
   }
 
-  function updatePager() {
-    if (!pagerCurrent) return;
-    pagerCurrent.textContent = String(currentIndex + 1).padStart(2, '0');
-    if (pagerPrev) pagerPrev.disabled = currentIndex === 0;
-    if (pagerNext) pagerNext.disabled = currentIndex === blocks.length - 1;
-  }
+  /* init: place slides without animation */
+  slides.forEach(function(s, i) {
+    var d = gd(i, 0);
+    var initPeek = window.innerWidth <= 800 ? 65 : 45;
+    var x  = d === 0 ? 0 : d === -1 ? -initPeek : d === 1 ? initPeek : d < 0 ? -160 : 160;
+    var op = d === 0 ? 1 : Math.abs(d) === 1 ? 0.35 : 0;
+    var zi = d === 0 ? 2 : Math.abs(d) === 1 ? 1 : 0;
+    s.style.transition = 'none';
+    s.style.transform  = 'translateX(' + x + '%) scale(' + (d === 0 ? 1 : 0.9) + ')';
+    s.style.opacity    = String(op);
+    s.style.zIndex     = String(zi);
+    s.classList.toggle('fcc-side', Math.abs(d) === 1);
+  });
+  requestAnimationFrame(function() { requestAnimationFrame(function() {
+    slides.forEach(function(s) { s.style.transition = ''; });
+  }); });
 
-  function goTo(index) {
-    const nextIndex = Math.max(0, Math.min(blocks.length - 1, index));
-    if (nextIndex === currentIndex) return;
-    currentIndex = nextIndex;
-    render();
-    updatePager();
-  }
-
-  if (pagerPrev) pagerPrev.addEventListener('click', function() { goTo(currentIndex - 1); });
-  if (pagerNext) pagerNext.addEventListener('click', function() { goTo(currentIndex + 1); });
-  window.addEventListener('resize', render);
-  blocks.forEach(function(b) { b.style.transition = 'none'; });
-  render();
-  updatePager();
-  requestAnimationFrame(function() {
-    requestAnimationFrame(function() {
-      blocks.forEach(function(b) { b.style.transition = ''; });
-    });
+  slides.forEach(function(s, i) {
+    s.addEventListener('click', function() { if (gd(i, cur) !== 0) goTo(i); });
   });
 
-  if ('IntersectionObserver' in window) {
-    const sectionObs = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (pager) pager.classList.toggle('is-visible', entry.isIntersecting);
-      });
-    }, { threshold: 0, rootMargin: '-20% 0px -20% 0px' });
-    sectionObs.observe(featuresSection);
-  }
+  dotEls.forEach(function(d, i) {
+    d.addEventListener('click', function() { goTo(i); });
+  });
 
-  // 휠 이벤트는 브라우저의 기본 세로 스크롤에 맡긴다.
-  // Windows의 고해상도 휠은 연속 이벤트를 내보내므로, 여기서 preventDefault()를
-  // 호출하면 숨겨진 캐러셀에서 페이지가 멈춘 것처럼 보일 수 있다.
+  if (prevBtn) prevBtn.addEventListener('click', function(){ goTo(((cur - 1) % total + total) % total); });
+  if (nextBtn) nextBtn.addEventListener('click', function(){ goTo((cur + 1) % total); });
+
+  /* 섹션 3 내에서 휠 스크롤로 슬라이드 이동 */
+  var fccSec = document.querySelector('.fcc-section');
+  if (fccSec) {
+    var wBusy = false;
+    var wheelRemainder = 0;
+    var wheelResetTimer = null;
+    var desktopCarousel = window.matchMedia('(min-width: 1001px) and (any-pointer: fine)');
+    var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    function normalizedWheelDelta(event) {
+      var delta = event.deltaY;
+      if (event.deltaMode === 1) delta *= 40;
+      else if (event.deltaMode === 2) delta *= window.innerHeight;
+      return delta;
+    }
+
+    function moveToSection(section) {
+      window.tiScrollTo(section);
+    }
+
+    document.addEventListener('wheel', function(e) {
+      var rect = fccSec.getBoundingClientRect();
+      if (!desktopCarousel.matches || reducedMotion.matches) return;
+      if (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey) return;
+      if (Math.abs(rect.top) > Math.max(150, window.innerHeight * 0.25)) return;
+
+      var dy = normalizedWheelDelta(e);
+      if (!dy) return;
+      e.preventDefault();
+
+      wheelRemainder += dy;
+      clearTimeout(wheelResetTimer);
+      wheelResetTimer = setTimeout(function() { wheelRemainder = 0; }, 120);
+      if (Math.abs(wheelRemainder) < 36 || wBusy) return;
+
+      dy = wheelRemainder;
+      wheelRemainder = 0;
+      wBusy = true;
+      if (dy > 0) {
+        if (cur < total - 1) {
+          goTo(cur + 1);
+          setTimeout(function() { wBusy = false; }, 700);
+        } else {
+          var next = fccSec.nextElementSibling;
+          if (next) moveToSection(next);
+          setTimeout(function() { wBusy = false; }, 700);
+        }
+      } else {
+        if (cur > 0) {
+          goTo(cur - 1);
+          setTimeout(function() { wBusy = false; }, 700);
+        } else {
+          var prev = fccSec.previousElementSibling;
+          if (prev) moveToSection(prev);
+          setTimeout(function() { wBusy = false; }, 700);
+        }
+      }
+    }, { passive: false });
+  }
 })();
 
 /* ── 3D Gear Icon ── */
