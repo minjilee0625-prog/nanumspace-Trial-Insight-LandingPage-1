@@ -28,7 +28,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html { scrollbar-width: none; -ms-overflow-style: none; }
-::-webkit-scrollbar { display: none; }
+::-webkit-scrollbar { width: 0; height: 0; background: transparent; }
 
 :root {
   --bg:        #F0F5FB;
@@ -2140,7 +2140,7 @@ window.addEventListener('scroll', function() {
     document.addEventListener('wheel', function(e) {
       var rect = fccSec.getBoundingClientRect();
       /* FCC가 뷰포트에 스냅돼 있을 때만 동작 */
-      if (Math.abs(rect.top) > window.innerHeight * 0.3) return;
+      if (Math.abs(rect.top) > window.innerHeight * 0.5) return;
       /* FCC 활성 중에는 항상 페이지 스크롤 차단 — scroll-snap 충돌 방지 */
       e.preventDefault();
       var dy = e.deltaY;
@@ -2173,6 +2173,40 @@ window.addEventListener('scroll', function() {
       }
     }, { passive: false });
   }
+})();
+
+/* ── 전체 섹션 휠 핸들러 (Windows/크로스 플랫폼 일관성) ── */
+(function() {
+  var secs = Array.prototype.slice.call(
+    document.querySelectorAll('#hero, #why, #features, #benefits, #faq, .cta-footer-wrap')
+  );
+  var fccEl = document.querySelector('#features');
+  var gBusy = false;
+
+  function curIdx() {
+    var best = 0, bestD = Infinity;
+    secs.forEach(function(s, i) {
+      var d = Math.abs(s.getBoundingClientRect().top);
+      if (d < bestD) { bestD = d; best = i; }
+    });
+    return best;
+  }
+
+  document.addEventListener('wheel', function(e) {
+    /* FCC 섹션이 뷰에 있으면 FCC 핸들러에 위임 */
+    if (fccEl && Math.abs(fccEl.getBoundingClientRect().top) <= window.innerHeight * 0.5) return;
+    var dy = e.deltaY;
+    if (e.deltaMode === 1) dy *= 40;
+    else if (e.deltaMode === 2) dy *= window.innerHeight;
+    if (Math.abs(dy) < 5) return;
+    e.preventDefault();
+    if (gBusy) return;
+    gBusy = true;
+    var ci = curIdx();
+    var ni = dy > 0 ? Math.min(ci + 1, secs.length - 1) : Math.max(ci - 1, 0);
+    if (ni !== ci) secs[ni].scrollIntoView({ behavior: 'smooth' });
+    setTimeout(function() { gBusy = false; }, 800);
+  }, { passive: false });
 })();
 
 /* ── 3D Gear Icon ── */
