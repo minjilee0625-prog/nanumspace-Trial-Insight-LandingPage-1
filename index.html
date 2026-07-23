@@ -106,6 +106,8 @@ nav {
   transition: background 0.2s !important;
 }
 .nav-cta:hover { background: var(--sky-dark) !important; }
+.nav-links, .nav-hamburger { transition: opacity 0.3s ease; }
+.nav-on-hero .nav-links, .nav-on-hero .nav-hamburger { opacity: 0; pointer-events: none; }
 nav.nav-scrolled {
   background: rgba(255,255,255,0.3);
   backdrop-filter: blur(16px) saturate(160%);
@@ -1211,6 +1213,14 @@ html body .feat-visual.feat-icon-pair { flex-direction: row !important; justify-
   .fcc-slide .feat-visual-newsletter { transform: scale(0.72) !important; margin-top: 4rem !important; }
 }
 
+@media (min-width: 801px) and (min-height: 901px) {
+  .fcc-slide .chips { bottom: 12rem; }
+}
+
+@media (min-width: 1367px) and (min-height: 901px) {
+  .hero-logo-right img { margin-top: 8rem !important; }
+}
+
 </style>
 </head>
 <body>
@@ -2187,68 +2197,6 @@ window.addEventListener('scroll', function() {
   if (prevBtn) prevBtn.addEventListener('click', function(){ goTo(((cur - 1) % total + total) % total); });
   if (nextBtn) nextBtn.addEventListener('click', function(){ goTo((cur + 1) % total); });
 
-  /* 섹션 3 내에서 휠 스크롤로 슬라이드 이동 */
-  var fccSec = document.querySelector('.fcc-section');
-  if (fccSec) {
-    var wBusy = false;
-    var wheelRemainder = 0;
-    var wheelResetTimer = null;
-    var desktopCarousel = window.matchMedia('(min-width: 1001px) and (any-pointer: fine)');
-
-    function normalizedWheelDelta(event) {
-      var delta = event.deltaY;
-      if (event.deltaMode === 1) delta *= 40;
-      else if (event.deltaMode === 2) delta *= window.innerHeight;
-      return delta;
-    }
-
-    function moveToSection(section) {
-      window.tiScrollTo(section);
-    }
-
-    document.addEventListener('wheel', function(e) {
-      var rect = fccSec.getBoundingClientRect();
-      if (!desktopCarousel.matches) return;
-      if (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey) return;
-      if (Math.abs(rect.top) > Math.max(150, window.innerHeight * 0.25)) return;
-      /* busy 또는 섹션 이동 중이면 차단 — wheelRemainder 누적도 하지 않음
-         (누적 후 해제 시 다음 슬라이드/섹션으로 튀는 버그 방지) */
-      if (wBusy || window._tiScrolling) { e.preventDefault(); return; }
-
-      var dy = normalizedWheelDelta(e);
-      if (!dy) return;
-      e.preventDefault();
-
-      wheelRemainder += dy;
-      clearTimeout(wheelResetTimer);
-      wheelResetTimer = setTimeout(function() { wheelRemainder = 0; }, 150);
-      if (Math.abs(wheelRemainder) < 50) return;
-
-      dy = wheelRemainder;
-      wheelRemainder = 0;
-      wBusy = true;
-      if (dy > 0) {
-        if (cur < total - 1) {
-          goTo(cur + 1);
-          setTimeout(function() { wBusy = false; }, 700);
-        } else {
-          var next = fccSec.nextElementSibling;
-          if (next) moveToSection(next);
-          /* 섹션 이동은 1400ms 애니메이션 + 여유 */
-          setTimeout(function() { wBusy = false; }, 1700);
-        }
-      } else {
-        if (cur > 0) {
-          goTo(cur - 1);
-          setTimeout(function() { wBusy = false; }, 700);
-        } else {
-          var prev = fccSec.previousElementSibling;
-          if (prev) moveToSection(prev);
-          setTimeout(function() { wBusy = false; }, 1700);
-        }
-      }
-    }, { passive: false });
-  }
 })();
 
 /* ── 전체 섹션 휠 핸들러 (Mac 트랙패드 + Windows 마우스 크로스 플랫폼) ── */
@@ -2256,7 +2204,6 @@ window.addEventListener('scroll', function() {
   var SECS = Array.prototype.slice.call(
     document.querySelectorAll('#hero, #why, #features, #benefits, #faq, .cta-footer-wrap')
   );
-  var fccEl = document.querySelector('#features');
   var busy = false;
   var acc = 0;
   var accTimer = null;
@@ -2278,8 +2225,6 @@ window.addEventListener('scroll', function() {
   }
 
   document.addEventListener('wheel', function(e) {
-    /* FCC가 뷰에 있으면 FCC 내부 핸들러가 처리 */
-    if (fccEl && Math.abs(fccEl.getBoundingClientRect().top) <= Math.max(150, window.innerHeight * 0.25)) return;
     if (e.ctrlKey || e.metaKey) return;
     var d = norm(e);
     if (!d) return;
@@ -2577,6 +2522,7 @@ window.addEventListener('scroll', function() {
     ticking = false;
     var scrolled = window.scrollY > (heroEl.offsetHeight - navEl.offsetHeight);
     navEl.classList.toggle('nav-scrolled', scrolled);
+    navEl.classList.toggle('nav-on-hero', !scrolled);
 
     var probeY = navEl.offsetHeight / 2;
     var currentTheme = 'dark';
